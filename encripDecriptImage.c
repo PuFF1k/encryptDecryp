@@ -5,7 +5,7 @@
 #include <unistd.h>
 #include <errno.h>
 #include <limits.h>
-#include "libtomcrypt-develop/src/headers/tomcrypt.h"
+#include "libtomcrypt/src/headers/tomcrypt.h"
 
 #define KEY_SIZE 32 //keysize in bytes
 static const char magicNumber[] = {0xbe, 0xbe, 0xbe, 0xbe};//magick number to add in header
@@ -176,7 +176,7 @@ char encryptFileAndSave(FILE *binaryTOEncrypt,
 						status = aes_ecb_encrypt(fileBytes + (i * 16), *encryptedDataOut + (i * 16), &skey);
 						if(status != CRYPT_OK)
 						{
-							printf("File encrypt error: %s: %s\n", error_to_string(status));
+							printf("File encrypt error : %s\n", error_to_string(status));
 							free(fileBytes);
 							return 0;
 						}
@@ -204,7 +204,7 @@ char encryptFileAndSave(FILE *binaryTOEncrypt,
    						printHeader(encryptedDataToSave);
 
     					char pathFile[PATH_MAX];
-    					sprintf(pathFile, "%s\\encryptedBinaryImage", dirToSaveFile);
+    					sprintf(pathFile, "%s/encryptedBinaryImage", dirToSaveFile);
 
     					if((fPtr = fopen(pathFile, "w")) != NULL)
     					{
@@ -278,14 +278,14 @@ char decryptAndCompareCrc(unsigned char* encryptedData, unsigned long long ecryp
 			status = aes_ecb_decrypt(encryptedData + (i * 16), decryptedData + (i * 16), &skey);
 			if(status != CRYPT_OK)
 			{
-				printf("File decrypt error: %s: %s\n", error_to_string(status));
+				printf("File decrypt error: %s\n", error_to_string(status));
 				return 0;
 			}
 		}
 
 
     	char pathFile[PATH_MAX];
-    	sprintf(pathFile, "%s\\dectyptedBinaryImage", dirToSaveFile);
+    	sprintf(pathFile, "%s/decryptedBinaryImage", dirToSaveFile);
 
     	if((fPtr = fopen(pathFile, "w")) != NULL)
     	{
